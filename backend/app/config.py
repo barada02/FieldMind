@@ -5,7 +5,7 @@ Uses Pydantic Settings for environment variable validation and type safety.
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, validator
-from typing import List
+from typing import List, Optional
 import os
 
 
@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
     
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file="backend/.env",
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore"
@@ -31,10 +31,10 @@ class Settings(BaseSettings):
     )
     
     # IBM Cloudant Configuration
-    cloudant_url: str = Field(..., description="Cloudant instance URL")
+    cloudant_url: Optional[str] = Field(default=None, description="Cloudant instance URL")
     cloudant_username: str = Field(default="", description="Cloudant username")
     cloudant_password: str = Field(default="", description="Cloudant password")
-    cloudant_api_key: str = Field(default="", description="Cloudant API key")
+    cloudant_api_key: Optional[str] = Field(default=None, description="Cloudant API key")
     
     # Database Names
     cloudant_machines_db: str = Field(default="machines", description="Machines database name")
@@ -95,15 +95,6 @@ class Settings(BaseSettings):
         log_dir = os.path.dirname(v)
         if log_dir:
             os.makedirs(log_dir, exist_ok=True)
-        return v
-    
-    @validator("cloudant_api_key", "cloudant_password")
-    def validate_cloudant_auth(cls, v, values):
-        """Ensure at least one authentication method is provided."""
-        if not v and not values.get("cloudant_username"):
-            raise ValueError(
-                "Either cloudant_api_key or cloudant_username/password must be provided"
-            )
         return v
     
     @property
