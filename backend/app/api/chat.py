@@ -8,6 +8,9 @@ from typing import List, Optional
 from datetime import datetime
 import logging
 import uuid
+import time
+
+from agent import get_agent
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -60,20 +63,27 @@ async def chat(request: ChatRequest):
         # Generate or use existing conversation ID
         conversation_id = request.conversation_id or str(uuid.uuid4())
         
-        # TODO: Process message through agent system
-        # For now, return a placeholder response
-        response_message = (
-            f"Received your message: '{request.message}'. "
-            "The multi-agent system will be integrated in Phase 4."
+        # Get the orchestrator agent
+        agent = get_agent()
+        
+        # Track processing time
+        start_time = time.time()
+        
+        # Process message through agent
+        response_message = await agent.achat(
+            message=request.message,
+            thread_id=conversation_id
         )
+        
+        processing_time = time.time() - start_time
         
         return ChatResponse(
             conversation_id=conversation_id,
             message=response_message,
             sources=[],
             metadata={
-                "agent": "placeholder",
-                "processing_time": 0.1
+                "agent": "orchestrator",
+                "processing_time": round(processing_time, 3)
             }
         )
         
@@ -99,9 +109,20 @@ async def get_conversation_history(conversation_id: str):
     try:
         logger.info(f"Retrieving conversation history: {conversation_id}")
         
-        # TODO: Retrieve from database/cache
-        # For now, return empty history
-        return []
+        # Get agent and retrieve history
+        agent = get_agent()
+        history = agent.get_history(thread_id=conversation_id)
+        
+        # Convert to Message objects
+        messages = []
+        for msg in history:
+            messages.append(Message(
+                role=msg["role"],
+                content=msg["content"],
+                timestamp=datetime.utcnow()
+            ))
+        
+        return messages
         
     except Exception as e:
         logger.error(f"Error retrieving conversation history: {e}")
