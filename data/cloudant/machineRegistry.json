@@ -1,0 +1,132 @@
+[
+  {
+    "machine_id": "RMG-1",
+    "name": "Rapid Mixer Granulator",
+    "manufacturer": "GEA",
+    "model_number": "PMA 600",
+    "location": "Line 1, Bay 2",
+    "year_installed": 2019,
+    "primary_function": "Used for wet granulation by mixing powders with binder solution to form granules.",
+    "key_components": ["Impeller", "Chopper", "Granulation Bowl", "Discharge Valve", "Binder Spray System"],
+    "sensors": [
+      {"sensor_name": "Impeller Speed", "unit": "RPM", "normal_min": 50, "normal_max": 300, "critical_threshold": 350},
+      {"sensor_name": "Chopper Speed", "unit": "RPM", "normal_min": 1000, "normal_max": 3000, "critical_threshold": 3500},
+      {"sensor_name": "Product Temperature", "unit": "°C", "normal_min": 25, "normal_max": 45, "critical_threshold": 55},
+      {"sensor_name": "Motor Load", "unit": "%", "normal_min": 30, "normal_max": 80, "critical_threshold": 90}
+    ],
+    "image_search_query": "GEA PMA rapid mixer granulator pharmaceutical"
+  },
+  {
+    "machine_id": "FBD-2",
+    "name": "Fluid Bed Dryer",
+    "manufacturer": "Glatt",
+    "model_number": "GPCG 120",
+    "location": "Line 1, Bay 3",
+    "year_installed": 2020,
+    "primary_function": "Dries wet granules using heated air fluidization.",
+    "key_components": ["Air Handling Unit", "Product Container", "Filter Bags", "Heater", "Exhaust System"],
+    "sensors": [
+      {"sensor_name": "Inlet Air Temperature", "unit": "°C", "normal_min": 60, "normal_max": 80, "critical_threshold": 90},
+      {"sensor_name": "Outlet Air Temperature", "unit": "°C", "normal_min": 40, "normal_max": 60, "critical_threshold": 70},
+      {"sensor_name": "Airflow Rate", "unit": "m3/h", "normal_min": 800, "normal_max": 1200, "critical_threshold": 1400},
+      {"sensor_name": "Product Moisture", "unit": "%", "normal_min": 1, "normal_max": 3, "critical_threshold": 5}
+    ],
+    "image_search_query": "Glatt GPCG fluid bed dryer pharmaceutical"
+  },
+  {
+    "machine_id": "MILL-3",
+    "name": "Multimill",
+    "manufacturer": "Cadmach",
+    "model_number": "CM-250",
+    "location": "Line 1, Bay 4",
+    "year_installed": 2018,
+    "primary_function": "Reduces particle size of dried granules to uniform size.",
+    "key_components": ["Rotor", "Screen", "Hopper", "Discharge Chute", "Drive Motor"],
+    "sensors": [
+      {"sensor_name": "Rotor Speed", "unit": "RPM", "normal_min": 1000, "normal_max": 3000, "critical_threshold": 3500},
+      {"sensor_name": "Motor Load", "unit": "%", "normal_min": 20, "normal_max": 75, "critical_threshold": 90},
+      {"sensor_name": "Vibration Level", "unit": "mm/s", "normal_min": 0, "normal_max": 5, "critical_threshold": 8}
+    ],
+    "image_search_query": "Cadmach multimill pharmaceutical granule milling"
+  },
+  {
+    "machine_id": "BLD-4",
+    "name": "Bin Blender",
+    "manufacturer": "Korsch",
+    "model_number": "XB 1500",
+    "location": "Line 2, Bay 1",
+    "year_installed": 2021,
+    "primary_function": "Blends granules with excipients uniformly.",
+    "key_components": ["Blending Bin", "Drive System", "Support Frame", "Control Panel", "Safety Interlocks"],
+    "sensors": [
+      {"sensor_name": "Blending Speed", "unit": "RPM", "normal_min": 5, "normal_max": 15, "critical_threshold": 20},
+      {"sensor_name": "Blending Time", "unit": "min", "normal_min": 10, "normal_max": 30, "critical_threshold": 40},
+      {"sensor_name": "Motor Load", "unit": "%", "normal_min": 10, "normal_max": 60, "critical_threshold": 80}
+    ],
+    "image_search_query": "pharmaceutical bin blender Korsch industrial blender"
+  },
+  {
+    "machine_id": "TBP-5",
+    "name": "Tablet Compression Machine",
+    "manufacturer": "Fette",
+    "model_number": "FE75",
+    "location": "Line 2, Bay 2",
+    "year_installed": 2022,
+    "primary_function": "Compresses blended granules into tablets.",
+    "key_components": ["Turret", "Punches and Dies", "Feeder System", "Compression Rollers", "Control System"],
+    "sensors": [
+      {"sensor_name": "Compression Force", "unit": "kN", "normal_min": 5, "normal_max": 30, "critical_threshold": 40},
+      {"sensor_name": "Tablet Weight", "unit": "mg", "normal_min": 200, "normal_max": 500, "critical_threshold": 550},
+      {"sensor_name": "Turret Speed", "unit": "RPM", "normal_min": 20, "normal_max": 60, "critical_threshold": 75},
+      {"sensor_name": "Fill Depth", "unit": "mm", "normal_min": 3, "normal_max": 10, "critical_threshold": 12}
+    ],
+    "image_search_query": "Fette FE75 tablet press machine pharmaceutical"
+  },
+  {
+    "machine_id": "DED-6",
+    "name": "Tablet Deduster",
+    "manufacturer": "Pharmatech",
+    "model_number": "PTD-800",
+    "location": "Line 2, Bay 3",
+    "year_installed": 2017,
+    "primary_function": "Removes excess powder from compressed tablets.",
+    "key_components": ["Spiral Channel", "Vibration Motor", "Dust Extraction Port", "Inlet Hopper", "Outlet Chute"],
+    "sensors": [
+      {"sensor_name": "Vibration Intensity", "unit": "Hz", "normal_min": 20, "normal_max": 60, "critical_threshold": 80},
+      {"sensor_name": "Throughput", "unit": "tablets/min", "normal_min": 50000, "normal_max": 120000, "critical_threshold": 140000}
+    ],
+    "image_search_query": "tablet deduster pharmaceutical spiral deduster machine"
+  },
+  {
+    "machine_id": "MD-7",
+    "name": "Metal Detector",
+    "manufacturer": "Loma Systems",
+    "model_number": "IQ4",
+    "location": "Line 2, Bay 4",
+    "year_installed": 2021,
+    "primary_function": "Detects and rejects metal contaminants in tablets.",
+    "key_components": ["Detection Coil", "Conveyor Belt", "Reject Mechanism", "Control Unit", "Sensor Head"],
+    "sensors": [
+      {"sensor_name": "Detection Sensitivity", "unit": "mm", "normal_min": 0.3, "normal_max": 1.5, "critical_threshold": 2},
+      {"sensor_name": "Belt Speed", "unit": "m/min", "normal_min": 10, "normal_max": 30, "critical_threshold": 40}
+    ],
+    "image_search_query": "Loma IQ4 pharmaceutical metal detector conveyor"
+  },
+  {
+    "machine_id": "COT-8",
+    "name": "Tablet Coating Machine",
+    "manufacturer": "ACG",
+    "model_number": "ACCELA COTA 350",
+    "location": "Line 3, Bay 1",
+    "year_installed": 2023,
+    "primary_function": "Applies coating solution to tablets for protection or controlled release.",
+    "key_components": ["Coating Pan", "Spray Guns", "Peristaltic Pump", "Air Handling Unit", "Exhaust System"],
+    "sensors": [
+      {"sensor_name": "Pan Speed", "unit": "RPM", "normal_min": 5, "normal_max": 15, "critical_threshold": 20},
+      {"sensor_name": "Inlet Air Temperature", "unit": "°C", "normal_min": 50, "normal_max": 70, "critical_threshold": 80},
+      {"sensor_name": "Spray Rate", "unit": "ml/min", "normal_min": 100, "normal_max": 300, "critical_threshold": 400},
+      {"sensor_name": "Exhaust Air Humidity", "unit": "%", "normal_min": 10, "normal_max": 30, "critical_threshold": 40}
+    ],
+    "image_search_query": "ACG Accela Cota tablet coating machine pharmaceutical"
+  }
+]
