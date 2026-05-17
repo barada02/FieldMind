@@ -4,102 +4,66 @@ __pycache__/
 *$py.class
 *.so
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Virtual Environment
 venv/
 env/
 ENV/
-env.bak/
-venv.bak/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
 
-# Environment Variables
+# Environment
 .env
 .env.local
-.env.*.local
 backend/.env
-backend/.env.local
 
-# IDE
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-.DS_Store
-
-# ChromaDB
-data/chromadb/
-*.chroma
+.project
+.pydevproject
 
 # Logs
-*.log
 logs/
-*.log.*
+*.log
+
+# Data
+data/chromadb/
+*.db
+*.sqlite
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
 
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
 .tox/
-.nox/
+.hypothesis/
+
+# Build
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Documentation
+docs/_build/
 
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
 
-# Temporary files
-*.tmp
-*.temp
-tmp/
-temp/
-
-# OS
-Thumbs.db
-.DS_Store
-
-# Documentation builds
-docs/_build/
-site/
-
-# MCP Server
-mcp_server/__pycache__/
-
-# Frontend
-node_modules/
-frontend/node_modules/
-*.min.js
-*.min.css
-
-# Data files (exclude actual data, keep structure)
-data/sops/*.pdf
-data/sops/*.docx
-data/sops/*.txt
-!data/sops/.gitkeep
-
-# Backup files
-*.bak
-*.backup
+# Pyre type checker
+.pyre/
 
 # Made with Bob
