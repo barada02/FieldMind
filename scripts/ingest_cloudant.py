@@ -22,6 +22,9 @@ def ingest_json_to_cloudant(file_path: Path, db_name: str, id_field: str):
         return
 
     try:
+        # Initialize the client FIRST
+        client = CloudantClient()
+
         # Create database if it doesn't exist before ingesting
         client.create_database_if_not_exists(db_name)
 
