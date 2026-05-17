@@ -10,7 +10,7 @@ import logging
 import uuid
 import time
 
-from agent import get_agent
+from backend.agent.orchestrator import get_agent
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

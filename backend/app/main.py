@@ -14,6 +14,7 @@ from pathlib import Path
 
 from backend.app.config import get_settings
 from backend.app.api import chat, health
+from backend.agent.orchestrator import get_agent
 
 # Configure logging
 settings = get_settings()
@@ -107,15 +108,29 @@ async def websocket_chat(websocket: WebSocket):
             message = data.get("message", "")
             
             logger.info(f"Received message: {message}")
-            
-            # TODO: Process message through agent system
-            # For now, send a simple echo response
-            response = {
-                "type": "message",
-                "content": f"Echo: {message}",
-                "status": "complete"
-            }
-            
+
+            # Process message through agent system
+            try:
+                # Use a session-based thread_id if available, otherwise default
+                # In a real app, we'd get this from the client's auth/session
+                agent_response = await get_agent().achat(
+                    message=message,
+                    thread_id="ws_session"
+                )
+
+                response = {
+                    "type": "message",
+                    "content": agent_response,
+                    "status": "complete"
+                }
+            except Exception as e:
+                logger.error(f"Agent error: {e}")
+                response = {
+                    "type": "error",
+                    "content": f"An error occurred: {str(e)}",
+                    "status": "error"
+                }
+
             await websocket.send_json(response)
             
     except WebSocketDisconnect:
