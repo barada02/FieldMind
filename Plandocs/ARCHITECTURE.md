@@ -16,6 +16,7 @@ Field Mind is a multi-agent system designed to assist technicians and field work
 - **ChromaDB**: Vector database for RAG pipeline
 - **OpenAI-compatible LLM**: Configurable provider with base URL and API key
 - **Custom MCP Server**: IBM Cloudant integration
+- **IBM Watson**: Speech-to-Text and Text-to-Speech services for voice mode
 
 ### Frontend
 - **HTML/CSS/JavaScript**: Simple, responsive web interface
@@ -143,11 +144,13 @@ graph TB
 graph TB
     subgraph Frontend
         UI[Web Interface<br/>HTML/CSS/JS]
+        VoiceUI[Voice Interface<br/>Audio Input/Output]
     end
     
     subgraph Backend API
         API[FastAPI Server]
         WS[WebSocket Handler]
+        VoiceAPI[Voice API<br/>STT/TTS Endpoints]
     end
     
     subgraph Multi-Agent System
@@ -170,14 +173,31 @@ graph TB
         TicketTools[Ticket Tools]
     end
     
+    subgraph Voice Services
+        VoiceService[Voice Service]
+        STT[Speech-to-Text]
+        TTS[Text-to-Speech]
+    end
+    
     subgraph External Services
         LLM[OpenAI-compatible<br/>LLM Provider]
         Cloudant[(IBM Cloudant<br/>NoSQL Database)]
+        Watson[IBM Watson<br/>STT/TTS APIs]
     end
     
     UI -->|HTTP/WebSocket| API
+    VoiceUI -->|Audio| VoiceAPI
     API --> WS
+    VoiceAPI --> VoiceService
     WS --> Supervisor
+    
+    VoiceService --> STT
+    VoiceService --> TTS
+    STT --> Watson
+    TTS --> Watson
+    
+    STT -->|Text| Supervisor
+    Synthesis -->|Text| TTS
     
     Supervisor -->|Route| RAGAgent
     Supervisor -->|Route| DBAgent
@@ -427,6 +447,7 @@ FieldMind/
 │   │   ├── models.py            # Pydantic models
 │   │   └── api/
 │   │       ├── chat.py          # Chat endpoints
+│   │       ├── voice.py         # Voice endpoints (NEW)
 │   │       └── sop.py           # SOP management
 │   ├── agent/
 │   │   ├── supervisor.py        # Supervisor agent
@@ -439,6 +460,10 @@ FieldMind/
 │   │   ├── ingestion.py         # Document processing
 │   │   ├── retriever.py         # RAG retrieval
 │   │   └── embeddings.py        # Embedding generation
+│   ├── voice/                   # Voice services (NEW)
+│   │   ├── __init__.py
+│   │   ├── service.py           # Watson STT/TTS integration
+│   │   └── utils.py             # Voice utilities
 │   ├── mcp_server/
 │   │   ├── server.py            # MCP server
 │   │   ├── cloudant_client.py   # Cloudant wrapper
@@ -454,7 +479,8 @@ FieldMind/
 │   │   └── styles.css
 │   └── js/
 │       ├── app.js
-│       └── chat.js
+│       ├── chat.js
+│       └── voice.js             # Voice interface (NEW)
 ├── data/
 │   ├── sops/
 │   └── chromadb/
@@ -514,6 +540,19 @@ CLOUDANT_API_KEY=your_cloudant_key
 CLOUDANT_USERNAME=your_username
 CLOUDANT_PASSWORD=your_password
 
+# IBM Watson Speech Services (NEW)
+STT_APIKEY=your_watson_stt_api_key
+STT_URL=https://api.us-south.speech-to-text.watson.cloud.ibm.com
+STT_MODEL=en-US_BroadbandModel
+
+TTS_APIKEY=your_watson_tts_api_key
+TTS_URL=https://api.us-south.text-to-speech.watson.cloud.ibm.com
+TTS_VOICE=en-US_AllisonV3Voice
+
+# Voice Mode Configuration (NEW)
+VOICE_ENABLED=false
+MAX_AUDIO_SIZE_MB=10
+
 # ChromaDB
 CHROMA_PERSIST_DIRECTORY=./data/chromadb
 
@@ -544,12 +583,67 @@ MCP_SERVER_PORT=3000
 - Secure Cloudant connections (HTTPS)
 - Audit logging for data access
 
+## Voice Mode Features
+
+### Speech-to-Text (STT)
+- **Audio Input**: Accepts WAV, FLAC, MP3, OGG, OPUS, WEBM formats
+- **Real-time Transcription**: Converts spoken queries to text
+- **Confidence Scores**: Provides transcription confidence metrics
+- **Multiple Models**: Supports various Watson STT models
+- **Language Support**: Configurable language models
+
+### Text-to-Speech (TTS)
+- **Audio Output**: Generates WAV, MP3, OGG, FLAC formats
+- **Multiple Voices**: Various voice options (male/female, accents)
+- **Natural Speech**: High-quality voice synthesis
+- **Streaming Support**: Can stream audio responses
+- **Custom Voice Selection**: Per-request voice configuration
+
+### Voice API Endpoints
+
+#### POST `/api/voice/transcribe`
+Transcribe audio file to text
+- **Input**: Audio file (multipart/form-data)
+- **Output**: Transcribed text with confidence score
+- **Max Size**: 10MB (configurable)
+
+#### POST `/api/voice/synthesize`
+Convert text to speech
+- **Input**: JSON with text and voice preferences
+- **Output**: Audio file in specified format
+- **Formats**: WAV, MP3, OGG, FLAC, OPUS, WEBM
+
+#### GET `/api/voice/info`
+Get available voices and models
+- **Output**: List of available TTS voices and STT models
+
+#### GET `/api/voice/health`
+Check voice service status
+- **Output**: Service availability and configuration status
+
+### Voice Workflow
+
+```
+1. User speaks into microphone
+2. Frontend captures audio
+3. Audio sent to /api/voice/transcribe
+4. Watson STT converts to text
+5. Text processed by multi-agent system
+6. Response generated
+7. Text sent to /api/voice/synthesize
+8. Watson TTS converts to speech
+9. Audio played to user
+```
+
 ## Future Enhancements
 
 - Multi-language support
-- Voice input/output
+- ~~Voice input/output~~ ✅ **IMPLEMENTED**
 - Mobile app (PWA)
 - Offline mode
 - Predictive maintenance
 - Advanced analytics dashboard
 - Integration with ERP systems
+- Real-time voice streaming
+- Voice command shortcuts
+- Speaker identification

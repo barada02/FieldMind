@@ -47,6 +47,26 @@ class Settings(BaseSettings):
     cloudant_password: str = Field(default="", description="Cloudant password")
     cloudant_api_key: Optional[str] = Field(default=None, description="Cloudant API key")
     
+    # IBM Watson Speech-to-Text Configuration
+    stt_apikey: Optional[str] = Field(default=None, description="Watson Speech-to-Text API key")
+    stt_url: Optional[str] = Field(default=None, description="Watson Speech-to-Text service URL")
+    stt_model: str = Field(
+        default="en-US_BroadbandModel",
+        description="Watson STT model to use"
+    )
+    
+    # IBM Watson Text-to-Speech Configuration
+    tts_apikey: Optional[str] = Field(default=None, description="Watson Text-to-Speech API key")
+    tts_url: Optional[str] = Field(default=None, description="Watson Text-to-Speech service URL")
+    tts_voice: str = Field(
+        default="en-US_AllisonV3Voice",
+        description="Watson TTS voice to use"
+    )
+    
+    # Voice Mode Configuration
+    voice_enabled: bool = Field(default=False, description="Enable voice mode features")
+    max_audio_size_mb: int = Field(default=10, description="Maximum audio file size in MB")
+    
     # Database Names
     cloudant_machines_db: str = Field(default="machines", description="Machines database name")
     cloudant_inventory_db: str = Field(default="inventory", description="Inventory database name")
@@ -122,6 +142,20 @@ class Settings(BaseSettings):
             "username": self.cloudant_username,
             "password": self.cloudant_password
         }
+    
+    @property
+    def voice_configured(self) -> bool:
+        """Check if voice services are properly configured."""
+        return bool(
+            self.voice_enabled and
+            self.stt_apikey and self.stt_url and
+            self.tts_apikey and self.tts_url
+        )
+    
+    @property
+    def max_audio_size_bytes(self) -> int:
+        """Get maximum audio file size in bytes."""
+        return self.max_audio_size_mb * 1024 * 1024
 
 
 # Global settings instance

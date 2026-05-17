@@ -13,8 +13,10 @@ langgraph
 # Vector Database
 chromadb
 
-# IBM Cloudant
+# IBM Services
 cloudant
+ibm-watson
+ibm-cloud-sdk-core
 
 # MCP (Model Context Protocol)
 mcp
