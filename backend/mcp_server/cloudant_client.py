@@ -24,6 +24,17 @@ class CloudantClient:
         self.client = CloudantV1(authenticator=self.authenticator)
         self.client.set_service_url(settings.cloudant_url)
 
+    def create_database_if_not_exists(self, db_name: str) -> None:
+        """Ensure the specified database exists in Cloudant."""
+        try:
+            self.client.create_db(db=db_name).get_result()
+            print(f"Successfully created database: {db_name}")
+        except ApiException as e:
+            if e.code == 412: # Conflict: Database already exists
+                pass
+            else:
+                print(f"Warning: Could not create database {db_name}: {e}")
+
     def get_document(self, db_name: str, doc_id: str) -> Optional[Dict[str, Any]]:
         """Retrieve a specific document by its ID."""
         try:
@@ -35,16 +46,12 @@ class CloudantClient:
     def query_documents(self, db_name: str, selector: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Search for documents using a selector query."""
         try:
-            # Using the _find endpoint for flexible queries
-            response = self.client.post_document(
+            # Use the post_find method for flexible queries
+            response = self.client.post_find(
                 db=db_name,
-                doc=None,
                 selector=selector
-            ).get_result() # Note: SDK might handle this differently, typically it's a post to _find
+            ).get_result()
 
-            # In some SDK versions, post_document might not be the right way for _find
-            # The official way is often via the raw request or specialized method
-            # Let's use the most common way to perform a search
             return response.get("docs", [])
         except Exception as e:
             print(f"Error querying documents in {db_name}: {e}")

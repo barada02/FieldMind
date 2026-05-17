@@ -1,0 +1,46 @@
+[
+  {
+    "ticket_id": "TKT-1001",
+    "machine_id": "RMG-1",
+    "issue": "Impeller speed fluctuating beyond normal range",
+    "priority": "High",
+    "status": "Open",
+    "assigned_to": "Technician A",
+    "created_at": "2026-05-10",
+    "last_updated": "2026-05-12",
+    "notes": "Initial inspection suggests a potential belt slippage."
+  },
+  {
+    "ticket_id": "TKT-1002",
+    "machine_id": "FBD-2",
+    "issue": "Inlet air temperature spikes periodically",
+    "priority": "Medium",
+    "status": "In Progress",
+    "assigned_to": "Technician B",
+    "created_at": "2026-05-14",
+    "last_updated": "2026-05-15",
+    "notes": "Checking the heating element and sensor calibration."
+  },
+  {
+    "ticket_id": "TKT-1003",
+    "machine_id": "TBP-5",
+    "issue": "Tablet weight variation exceeding 5%",
+    "priority": "Critical",
+    "status": "Open",
+    "assigned_to": "Technician A",
+    "created_at": "2026-05-16",
+    "last_updated": "2026-05-16",
+    "notes": "Possible wear on the punch and die set. Needs immediate attention."
+  },
+  {
+    "ticket_id": "TKT-1004",
+    "machine_id": "MD-7",
+    "issue": "False metal detection triggers",
+    "priority": "Low",
+    "status": "Closed",
+    "assigned_to": "Technician C",
+    "created_at": "2026-05-01",
+    "last_updated": "2026-05-05",
+    "notes": "Adjusted sensitivity settings. Problem resolved."
+  }
+]

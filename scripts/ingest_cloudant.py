@@ -22,6 +22,9 @@ def ingest_json_to_cloudant(file_path: Path, db_name: str, id_field: str):
         return
 
     try:
+        # Create database if it doesn't exist before ingesting
+        client.create_database_if_not_exists(db_name)
+
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
 
