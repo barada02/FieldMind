@@ -1,435 +1,267 @@
-# Field Mind - Multi-Agent System for Field Technicians
+# Field Mind - AI-Powered Field Technician Assistant
 
-Field Mind is an intelligent multi-agent system designed to assist technicians and field workers with:
-- 🔍 Finding SOPs (Standard Operating Procedures) for any problem
-- 🔧 Querying tool and parts inventory
-- 🏭 Getting machine information and maintenance history
-- 🎫 Creating purchase tickets for tools and parts
+Field Mind is a multi-agent system designed to assist field technicians with finding SOPs, querying inventory, checking machine information, and creating purchase tickets.
 
-## Features
+## 🌟 Features
 
-### 🤖 Intelligent Agent System
-- Natural language understanding
-- Context-aware responses
-- Multi-tool orchestration with LangGraph
-- Streaming responses for better UX
+- **SOP Search**: Semantic search across Standard Operating Procedures using RAG
+- **Machine Information**: Query machine details from IBM Cloudant database
+- **Inventory Management**: Check tool and parts availability
+- **Ticket Creation**: Create purchase tickets for required tools/parts
+- **Real-time Chat**: WebSocket-based streaming responses
+- **Multi-Agent System**: Powered by LangGraph for intelligent task routing
 
-### 📚 RAG-Powered SOP Retrieval
-- Semantic search across all SOPs
-- Relevant section extraction
-- Source citation and references
-- Support for PDF, DOCX, TXT, and Markdown
+## 🏗️ Architecture
 
-### 🔌 Custom MCP Server
-- Direct integration with IBM Cloudant
-- Machine data queries
-- Inventory management
-- Ticket creation and tracking
+Field Mind uses a multi-agent architecture with:
+- **Supervisor Agent**: Routes queries to specialized agents
+- **RAG Agent**: Searches SOPs using ChromaDB vector database
+- **Database Agent**: Queries IBM Cloudant via custom MCP server
+- **Synthesis Node**: Aggregates results and generates responses
 
-### 💻 Simple Web Interface
-- Clean, responsive chat UI
-- Real-time streaming responses
-- Quick action buttons
-- Message history
-
-## Architecture
-
-```
-┌─────────────┐
-│   Frontend  │ (HTML/CSS/JS)
-└──────┬──────┘
-       │ HTTP/WebSocket
-┌──────▼──────┐
-│   FastAPI   │
-│   Backend   │
-└──────┬──────┘
-       │
-   ┌───▼────┐
-   │LangGraph│
-   │  Agent  │
-   └───┬────┘
-       │
-   ┌───▼────────────┬──────────┐
-   │                │          │
-┌──▼───┐    ┌──────▼─┐   ┌───▼────┐
-│ RAG  │    │  MCP   │   │  LLM   │
-│Pipeline│  │ Server │   │Provider│
-└──┬───┘    └───┬────┘   └────────┘
-   │            │
-┌──▼────┐  ┌───▼────────┐
-│ChromaDB│  │  Cloudant  │
-└────────┘  └────────────┘
-```
-
-## Technology Stack
-
-- **Backend**: FastAPI, Python 3.10+
-- **Agent Framework**: LangGraph
-- **Vector Database**: ChromaDB
-- **Database**: IBM Cloudant (NoSQL)
-- **LLM**: OpenAI-compatible API (configurable)
-- **Frontend**: HTML, CSS, JavaScript (Vanilla)
-- **MCP**: Custom Model Context Protocol server
-
-## Quick Start
-
-### Prerequisites
+## 📋 Prerequisites
 
 - Python 3.10 or higher
-- IBM Cloudant account with credentials
-- OpenAI API key (or compatible provider)
+- IBM Cloudant account and credentials
+- OpenAI API key (or compatible LLM provider)
 - Git
 
-### Installation
+## 🚀 Quick Start
 
-1. **Clone the repository**
+### 1. Clone the Repository
+
 ```bash
 git clone <repository-url>
 cd FieldMind
 ```
 
-2. **Create virtual environment**
+### 2. Create Virtual Environment
+
 ```bash
+# Windows
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+venv\Scripts\activate
+
+# Linux/Mac
+python3 -m venv venv
+source venv/bin/activate
 ```
 
-3. **Install dependencies**
+### 3. Install Dependencies
+
 ```bash
 pip install -r backend/requirements.txt
 ```
 
-4. **Configure environment variables**
+### 4. Configure Environment
+
 ```bash
+# Copy example environment file
 cp backend/.env.example backend/.env
-# Edit .env with your credentials
+
+# Edit backend/.env with your credentials
+# Required:
+# - OPENAI_API_KEY
+# - CLOUDANT_URL
+# - CLOUDANT_USERNAME or CLOUDANT_API_KEY
 ```
 
-5. **Initialize databases**
-```bash
-# Create Cloudant databases
-python scripts/init_cloudant.py
+### 5. Initialize Directories
 
-# Initialize ChromaDB (automatic on first run)
+```bash
+# Create necessary directories
+mkdir -p data/sops data/chromadb logs
 ```
 
-6. **Start the MCP server**
-```bash
-python -m backend.mcp_server.server
-```
+### 6. Start the Application
 
-7. **Start the FastAPI backend**
 ```bash
+# Start FastAPI backend
 cd backend
 uvicorn app.main:app --reload --port 8000
+
+# Or use Python directly
+python -m app.main
 ```
 
-8. **Access the application**
-Open your browser and navigate to: `http://localhost:8000/static/index.html`
+### 7. Access the Interface
 
-## Configuration
-
-### Environment Variables
-
-Create a `.env` file in the `backend` directory:
-
-```env
-# LLM Configuration
-OPENAI_API_BASE_URL=https://api.openai.com/v1
-OPENAI_API_KEY=your_api_key_here
-OPENAI_MODEL=gpt-4-turbo
-
-# IBM Cloudant
-CLOUDANT_URL=https://your-account.cloudant.com
-CLOUDANT_API_KEY=your_cloudant_api_key
-CLOUDANT_USERNAME=your_username
-CLOUDANT_PASSWORD=your_password
-
-# ChromaDB
-CHROMA_PERSIST_DIRECTORY=./data/chromadb
-
-# API Settings
-API_HOST=0.0.0.0
-API_PORT=8000
-DEBUG=false
-
-# MCP Server
-MCP_SERVER_PORT=3000
+Open your browser and navigate to:
+```
+http://localhost:8000
 ```
 
-## Usage
-
-### Chat Interface
-
-1. Open the web interface
-2. Type your question in the input field
-3. Press Enter or click Send
-4. View the agent's response with sources
-
-### Example Queries
-
-**Finding SOPs:**
-```
-"How do I calibrate the CNC machine?"
-"What's the procedure for replacing the hydraulic pump?"
-```
-
-**Checking Inventory:**
-```
-"Do we have torque wrenches in stock?"
-"Show me all tools below minimum quantity"
-```
-
-**Machine Information:**
-```
-"What's the status of machine Alpha-001?"
-"Show me maintenance history for CNC machines"
-```
-
-**Creating Tickets:**
-```
-"Create a purchase ticket for 3 torque wrenches"
-"I need to order replacement parts for machine Beta-002"
-```
-
-### Ingesting SOPs
-
-Use the API endpoint to upload SOP documents:
-
-```bash
-curl -X POST "http://localhost:8000/api/sop/ingest" \
-  -F "file=@path/to/sop.pdf" \
-  -F "metadata={\"title\":\"CNC Calibration\",\"machine_types\":[\"CNC\"]}"
-```
-
-Or use the Python client:
-
-```python
-from backend.rag.ingestion import SOPIngestionPipeline
-
-pipeline = SOPIngestionPipeline(
-    persist_directory="./data/chromadb",
-    openai_api_key="your_key"
-)
-
-pipeline.ingest_document(
-    file_path="path/to/sop.pdf",
-    metadata={
-        "title": "CNC Calibration Procedure",
-        "machine_types": ["CNC"],
-        "version": "2.1"
-    }
-)
-```
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 FieldMind/
 ├── backend/
 │   ├── app/
+│   │   ├── __init__.py
 │   │   ├── main.py              # FastAPI application
-│   │   ├── config.py            # Configuration
-│   │   ├── models.py            # Pydantic models
+│   │   ├── config.py            # Configuration management
 │   │   └── api/
-│   │       ├── chat.py          # Chat endpoints
-│   │       └── sop.py           # SOP management
-│   ├── agent/
-│   │   ├── supervisor.py        # Main agent
-│   │   ├── state.py             # Agent state
-│   │   └── graph.py             # LangGraph definition
-│   ├── rag/
-│   │   ├── ingestion.py         # Document processing
-│   │   ├── retriever.py         # RAG retrieval
-│   │   └── embeddings.py        # Embedding generation
-│   ├── mcp_server/
-│   │   ├── server.py            # MCP server
-│   │   ├── cloudant_client.py   # Cloudant wrapper
+│   │       ├── __init__.py
+│   │       ├── health.py        # Health check endpoints
+│   │       └── chat.py          # Chat endpoints
+│   ├── agent/                   # Multi-agent system (Phase 4)
+│   │   ├── __init__.py
+│   │   ├── supervisor.py
+│   │   ├── rag_agent.py
+│   │   ├── database_agent.py
+│   │   └── graph.py
+│   ├── rag/                     # RAG pipeline (Phase 3)
+│   │   ├── __init__.py
+│   │   ├── ingestion.py
+│   │   └── retrieval.py
+│   ├── mcp_server/              # MCP server (Phase 2)
+│   │   ├── __init__.py
+│   │   ├── server.py
 │   │   └── tools/
-│   │       ├── machine.py       # Machine tools
-│   │       ├── inventory.py     # Inventory tools
-│   │       └── ticket.py        # Ticket tools
 │   ├── requirements.txt
 │   └── .env.example
 ├── frontend/
-│   ├── index.html
+│   ├── index.html               # Main HTML interface
 │   ├── css/
-│   │   └── styles.css
+│   │   └── styles.css           # Styles
 │   └── js/
-│       ├── app.js
-│       └── chat.js
+│       └── app.js               # Frontend logic
 ├── data/
 │   ├── sops/                    # SOP documents
-│   └── chromadb/                # ChromaDB storage
-├── docs/
-│   ├── API.md
-│   ├── SETUP.md
-│   └── USER_GUIDE.md
-├── tests/
-│   ├── test_agent.py
-│   ├── test_rag.py
-│   └── test_mcp.py
-├── scripts/
-│   ├── init_cloudant.py         # Initialize Cloudant DBs
-│   └── seed_data.py             # Seed sample data
-├── .gitignore
-├── README.md
-├── ARCHITECTURE.md
-└── IMPLEMENTATION_GUIDE.md
+│   └── chromadb/                # Vector database
+├── docs/                        # Documentation
+├── Plandocs/                    # Planning documents
+│   ├── PROJECT_PLAN.md
+│   ├── ARCHITECTURE.md
+│   ├── IMPLEMENTATION_GUIDE.md
+│   └── CONSIDERATIONS.md
+├── scripts/                     # Utility scripts
+├── tests/                       # Test files
+└── README.md
 ```
 
-## API Documentation
+## 🔧 Configuration
 
-### REST Endpoints
+### Environment Variables
 
-#### Chat
-- `POST /api/chat` - Send message to agent
-- `GET /api/chat/stream` - WebSocket for streaming responses
+Edit `backend/.env` with your configuration:
 
-#### SOP Management
-- `POST /api/sop/ingest` - Upload and process SOP document
-- `GET /api/sop/list` - List all indexed SOPs
-- `DELETE /api/sop/{sop_id}` - Remove SOP from index
+```env
+# OpenAI-compatible LLM
+OPENAI_API_KEY=your_api_key
+OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_MODEL=gpt-4-turbo-preview
 
-#### Health
-- `GET /api/health` - Health check endpoint
+# IBM Cloudant
+CLOUDANT_URL=https://your-account.cloudant.com
+CLOUDANT_USERNAME=your_username
+CLOUDANT_PASSWORD=your_password
+# OR
+CLOUDANT_API_KEY=your_api_key
 
-### WebSocket Protocol
+# Database Names
+CLOUDANT_MACHINES_DB=machines
+CLOUDANT_INVENTORY_DB=inventory
+CLOUDANT_TICKETS_DB=tickets
 
-Connect to `/api/chat/stream` and send:
-```json
-{
-  "text": "Your question here",
-  "context": {}
+# ChromaDB
+CHROMA_PERSIST_DIRECTORY=../data/chromadb
+CHROMA_COLLECTION_NAME=sops
+
+# Application
+APP_HOST=0.0.0.0
+APP_PORT=8000
+APP_DEBUG=true
+```
+
+## 📊 API Endpoints
+
+### Health Check
+```
+GET /api/health
+```
+
+### Chat
+```
+POST /api/chat
+Body: {
+  "message": "How do I calibrate the CNC machine?",
+  "conversation_id": "optional-uuid"
 }
 ```
 
-Receive:
-```json
-{
-  "type": "chunk",
-  "content": "Response chunk..."
-}
+### WebSocket
+```
+WS /ws/chat
 ```
 
-## Development
-
-### Running Tests
+## 🧪 Testing
 
 ```bash
-# Run all tests
-pytest
-
-# Run specific test file
-pytest tests/test_agent.py
+# Run tests (Phase 6)
+pytest tests/
 
 # Run with coverage
 pytest --cov=backend tests/
 ```
 
-### Code Style
+## 📈 Development Phases
 
-```bash
-# Format code
-black backend/
+- ✅ **Phase 1**: Foundation (Current)
+  - Project structure
+  - FastAPI application
+  - Configuration management
+  - Frontend interface
 
-# Lint code
-flake8 backend/
+- ⏳ **Phase 2**: MCP Server
+  - Custom MCP server for Cloudant
+  - Database tools implementation
 
-# Type checking
-mypy backend/
-```
+- ⏳ **Phase 3**: RAG Pipeline
+  - ChromaDB setup
+  - Document ingestion
+  - Semantic search
 
-### Adding New MCP Tools
+- ⏳ **Phase 4**: Multi-Agent System
+  - Supervisor agent
+  - RAG agent
+  - Database agent
+  - LangGraph orchestration
 
-1. Create tool file in `backend/mcp_server/tools/`
-2. Implement tool class with `handle()` method
-3. Register tool in `backend/mcp_server/server.py`
-4. Update documentation
+- ⏳ **Phase 5**: Integration
+  - Agent system integration
+  - Streaming responses
+  - Error handling
 
-## Troubleshooting
+- ⏳ **Phase 6**: Testing & Documentation
+  - Unit tests
+  - Integration tests
+  - Documentation
 
-### Common Issues
-
-**MCP Server Connection Failed**
-- Ensure MCP server is running on correct port
-- Check firewall settings
-- Verify environment variables
-
-**ChromaDB Initialization Error**
-- Check write permissions for data directory
-- Ensure sufficient disk space
-- Verify ChromaDB version compatibility
-
-**Cloudant Connection Error**
-- Verify credentials in .env file
-- Check network connectivity
-- Ensure databases exist
-
-**LLM API Errors**
-- Verify API key is valid
-- Check API base URL
-- Monitor rate limits
-
-## Performance Optimization
-
-- **Caching**: Implement Redis for frequent queries
-- **Batch Processing**: Process multiple documents in parallel
-- **Connection Pooling**: Reuse Cloudant connections
-- **Async Operations**: Use async/await throughout
-- **Streaming**: Stream responses for better UX
-
-## Security
-
-- Store credentials in environment variables
-- Use HTTPS in production
-- Implement rate limiting
-- Validate all inputs
-- Sanitize user queries
-- Regular security audits
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-## License
+## 📝 License
 
-[Your License Here]
+This project is licensed under the MIT License.
 
-## Support
+## 📞 Support
 
-For issues and questions:
-- GitHub Issues: [repository-url]/issues
-- Documentation: See `docs/` directory
-- Email: [support-email]
+For questions or issues, please open an issue on GitHub.
 
-## Roadmap
+## 🙏 Acknowledgments
 
-### Phase 1 (Current)
-- ✅ Core architecture design
-- ⏳ Basic agent implementation
-- ⏳ MCP server development
-- ⏳ RAG pipeline setup
+- Built with FastAPI, LangGraph, and ChromaDB
+- Powered by OpenAI-compatible LLMs
+- Integrated with IBM Cloudant
 
-### Phase 2
-- Multi-language support
-- Voice input/output
-- Mobile app
-- Advanced analytics
+---
 
-### Phase 3
-- Predictive maintenance
-- Automated ticket routing
-- Integration with ERP systems
-- Offline mode
-
-## Acknowledgments
-
-- LangChain team for the agent framework
-- Anthropic for MCP specification
-- IBM for Cloudant database
-- OpenAI for LLM capabilities
+**Status**: Phase 1 Complete ✅  
+**Version**: 1.0.0  
+**Last Updated**: 2024
