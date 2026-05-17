@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Field Mind - Technician Assistant</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">🔧</span>
+                    Field Mind
+                </h1>
+                <p class="tagline">Your AI-Powered Field Technician Assistant</p>
+            </div>
+            <div class="header-actions">
+                <button id="clearChat" class="btn btn-secondary" title="Clear conversation">
+                    <span>🗑️</span> Clear
+                </button>
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Chat Container -->
+            <div class="chat-container">
+                <!-- Welcome Message -->
+                <div class="welcome-message" id="welcomeMessage">
+                    <div class="welcome-icon">👋</div>
+                    <h2>Welcome to Field Mind!</h2>
+                    <p>I can help you with:</p>
+                    <ul class="feature-list">
+                        <li>📋 Finding SOPs and procedures</li>
+                        <li>🔍 Checking machine information</li>
+                        <li>📦 Querying inventory and parts</li>
+                        <li>🎫 Creating purchase tickets</li>
+                    </ul>
+                    <p class="welcome-prompt">Ask me anything to get started!</p>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be dynamically added here -->
+                </div>
+
+                <!-- Typing Indicator -->
+                <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-container">
+                    <textarea 
+                        id="messageInput" 
+                        class="message-input" 
+                        placeholder="Ask about SOPs, machines, inventory, or tickets..."
+                        rows="1"
+                    ></textarea>
+                    <button id="sendButton" class="btn btn-primary send-button" title="Send message">
+                        <span class="send-icon">➤</span>
+                    </button>
+                </div>
+                <div class="input-hints">
+                    <span class="hint">💡 Try: "How do I calibrate the CNC machine?"</span>
+                    <span class="hint">💡 Try: "Check inventory for hydraulic pumps"</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Field Mind - Multi-Agent Technician Assistant</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+</body>
+</html>
