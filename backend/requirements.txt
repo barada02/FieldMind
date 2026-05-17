@@ -32,3 +32,4 @@ pydantic-settings
 # Utilities
 httpx
 aiofiles
+requests

@@ -30,6 +30,17 @@ class Settings(BaseSettings):
         description="Model name to use"
     )
     
+    # Jina AI Configuration
+    jina_api_key: str = Field(..., description="Jina AI API key for embeddings")
+    jina_model: str = Field(
+        default="jina-embeddings-v5-text-small",
+        description="Jina embedding model to use"
+    )
+    jina_task: str = Field(
+        default="retrieval.query",
+        description="Jina task type (retrieval.query or retrieval.passage)"
+    )
+    
     # IBM Cloudant Configuration
     cloudant_url: Optional[str] = Field(default=None, description="Cloudant instance URL")
     cloudant_username: str = Field(default="", description="Cloudant username")
